@@ -25,7 +25,6 @@ class EntryParser {
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
-
             if (event.isStartElement()) {
                 StartElement startElement = event.asStartElement();
                 if (startElement.getName().getLocalPart().equals("Entry")) {
@@ -42,3 +41,4 @@ class EntryParser {
         return entry;
     }
 }
+

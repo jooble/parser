@@ -16,9 +16,9 @@ public class Main {
 
         HandlerFiles handlerFiles = new HandlerFilesImpl();
 
-        File dirMonitoring = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\файлы для парсинга");
-        File treatedFiles = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\обработанные файлы");
-        File errorFiles = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\файлы обработка которых не удалась");
+        File dirMonitoring = new File("D:\\parsing\\parsing");
+        File treatedFiles = new File("D:\\parsing\\treated");
+        File errorFiles = new File("D:\\parsing\\error");
         String format = "XML";
 
 
