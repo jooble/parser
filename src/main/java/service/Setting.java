@@ -4,6 +4,7 @@ import IO.HandlerFiles;
 import IO.HandlerFilesImpl;
 import dao.EntryDao;
 import dao.EntryDaoImpl;
+import model.Entry;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -39,6 +40,8 @@ public class Setting {
                     .build();
 
             Metadata metadata = new MetadataSources(standardRegistry)
+                    .addAnnotatedClass(Entry.class)
+                    .addAnnotatedClassName("model.Entry")
                     .getMetadataBuilder()
                     .build();
 

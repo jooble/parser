@@ -34,26 +34,31 @@ public class EntryService extends TimerTask {
 
     private void handle() {
         int size = queue.size();
+
         for (int i = 0; i < size; i++) {
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    File file = queue.poll();
+                    try {
+                        entryDao.begin();
 
-            File file = queue.poll();
-            try {
-                entryDao.begin();
+                        Entry entry = parser.parse(file);
 
-                Entry entry = parser.parse(file);
+                        handlerFiles.moveFile(file, treatedFiles);
 
-                handlerFiles.moveFile(file, treatedFiles);
+                        entryDao.insert(entry);
 
-                entryDao.insert(entry);
-            } catch (Exception e) {
-                entryDao.rollback();
+                        entryDao.commit();
+                    } catch (Exception e) {
+                        entryDao.rollback();
 
-                handlerFiles.moveFile(file, errorFiles);
-                System.out.println("Обработка не удалась");
-            }
+                        handlerFiles.moveFile(file, errorFiles);
+                        System.out.println("Обработка не удалась");
+                    }
+                }
+            });
         }
-
-
     }
 
 
