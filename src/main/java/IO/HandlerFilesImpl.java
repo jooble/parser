@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HandlerFilesImplement implements HandlerFiles {
+public class HandlerFilesImpl implements HandlerFiles {
 
     @Override
-    public List<File> checkDirectory(File dir, String format) {
+    public List<File> checkDirectory(File dir, String... formats) {
         //TODO настроить вывод ошибок
         if (!dir.isDirectory()) {
             System.out.println("Директории нет");
@@ -18,7 +18,10 @@ public class HandlerFilesImplement implements HandlerFiles {
             File[] files = dir.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.toLowerCase().endsWith(format.toLowerCase());
+                    for (String format : formats) {
+                        return name.toLowerCase().endsWith(format.toLowerCase());
+                    }
+                    return false;
                 }
             });
 
@@ -29,7 +32,7 @@ public class HandlerFilesImplement implements HandlerFiles {
     @Override
     public void moveFile(File file, File dir) {
         //TODO настроить вывод ошибок
-        if (dir.isDirectory()) {
+        if (!dir.isDirectory()) {
             System.out.println("Директории нет");
         } else {
             file.renameTo(new File(dir + file.separator + file.getName()));
