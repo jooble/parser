@@ -38,12 +38,11 @@ public class EntryService extends TimerTask {
     }
 
     private void handle() {
-        for (int i = 0; i <= queue.size(); i++) {
+        while (!queue.isEmpty()) {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    while (!queue.isEmpty()) {
-                        File file = queue.poll();
+                    File file = queue.poll();
                         try {
                             Entry entry = parser.parse(file);
                             handlerFiles.moveFile(file, treatedFiles);
@@ -51,12 +50,9 @@ public class EntryService extends TimerTask {
                         } catch (Exception e) {
                             //TODO
                             handlerFiles.moveFile(file, errorFiles);
-                            System.out.println(file);
                             System.out.println("Обработка не удалась");
                         }
                     }
-                }
-
             });
         }
     }
