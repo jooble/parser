@@ -2,15 +2,17 @@ package dao;
 
 import model.Entry;
 
-import java.util.List;
-
 public interface EntryDao {
+
+    void begin();
+
+    void commit();
+
+    void rollback();
 
     void insert(Entry entry);
 
     void update(Entry entry);
-
-    List<Entry> getAll();
 
     Entry getById(long id);
 

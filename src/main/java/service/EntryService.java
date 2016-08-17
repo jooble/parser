@@ -21,37 +21,37 @@ public class EntryService extends TimerTask {
     private File errorFiles;
     private String[] format;
 
-    public EntryService(EntryDao entryDao,
-                        ExecutorService executorService,
-                        HandlerFiles handlerFiles,
-                        File dirMonitoring,
-                        File treatedFiles,
-                        File errorFiles,
-                        String... format) {
-        this.entryDao = entryDao;
-        this.executorService = executorService;
-        this.handlerFiles = handlerFiles;
-        this.dirMonitoring = dirMonitoring;
-        this.treatedFiles = treatedFiles;
-        this.errorFiles = errorFiles;
-        this.format = format;
+    public EntryService(Setting setting) {
+        this.entryDao = setting.getEntryDao();
+        this.executorService = setting.getExecutorService();
+        this.handlerFiles = setting.getHandlerFiles();
+        this.dirMonitoring = setting.getDirMonitoring();
+        this.treatedFiles = setting.getTreatedFiles();
+        this.errorFiles = setting.getErrorFiles();
+        this.format = setting.getFormat();
     }
+
 
     private void handle() {
         int size = queue.size();
         for (int i = 0; i < size; i++) {
 
             File file = queue.poll();
-                        try {
-                            Entry entry = parser.parse(file);
-                            handlerFiles.moveFile(file, treatedFiles);
-                            entryDao.insert(entry);
-                        } catch (Exception e) {
-                            //TODO
-                            handlerFiles.moveFile(file, errorFiles);
-                            System.out.println("Обработка не удалась");
-                        }
-                    }
+            try {
+                entryDao.begin();
+
+                Entry entry = parser.parse(file);
+
+                handlerFiles.moveFile(file, treatedFiles);
+
+                entryDao.insert(entry);
+            } catch (Exception e) {
+                entryDao.rollback();
+
+                handlerFiles.moveFile(file, errorFiles);
+                System.out.println("Обработка не удалась");
+            }
+        }
 
 
     }
