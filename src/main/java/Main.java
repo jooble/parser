@@ -17,13 +17,14 @@ public class Main {
         HandlerFiles handlerFiles = new HandlerFilesImpl();
 
         File dirMonitoring = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\файлы для парсинга");
-        File errorFiles = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\файлы обработка которых не удалась");
         File treatedFiles = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\обработанные файлы");
+        File errorFiles = new File("C:\\Users\\Дмитрий\\Desktop\\parsing\\файлы обработка которых не удалась");
         String format = "XML";
 
 
         EntryService service = new EntryService(dao, executorService, handlerFiles, dirMonitoring, treatedFiles, errorFiles, format);
 
         service.run();
+        service.shutdown();
     }
 }

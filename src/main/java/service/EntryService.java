@@ -7,7 +7,6 @@ import model.Entry;
 import java.io.File;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 public class EntryService extends TimerTask {
@@ -38,35 +37,38 @@ public class EntryService extends TimerTask {
         this.format = format;
     }
 
-    public void handle() throws ExecutionException, InterruptedException {
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                while (!queue.isEmpty()) {
-                    File file = queue.poll();
-                    try {
-                        Entry entry = parser.parse(file);
-                        handlerFiles.moveFile(file, treatedFiles);
-                        entryDao.insert(entry);
-                    } catch (Exception e) {
-                        //TODO
-                        System.out.println("Обработка не удалась");
-                        handlerFiles.moveFile(file, errorFiles);
+    private void handle() {
+        for (int i = 0; i <= queue.size(); i++) {
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    while (!queue.isEmpty()) {
+                        File file = queue.poll();
+                        try {
+                            Entry entry = parser.parse(file);
+                            handlerFiles.moveFile(file, treatedFiles);
+                            entryDao.insert(entry);
+                        } catch (Exception e) {
+                            //TODO
+                            handlerFiles.moveFile(file, errorFiles);
+                            System.out.println(file);
+                            System.out.println("Обработка не удалась");
+                        }
                     }
                 }
-            }
-        });
+
+            });
+        }
+    }
+
+
+    public void shutdown() {
+        executorService.shutdown();
     }
 
     @Override
     public void run() {
         queue.addAll(handlerFiles.checkDirectory(dirMonitoring, format));
-        try {
-            handle();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        handle();
     }
 }
