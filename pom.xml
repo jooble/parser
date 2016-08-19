@@ -42,11 +42,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.google.code.maven-replacer-plugin</groupId>
+            <artifactId>replacer</artifactId>
+            <version>1.5.3</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -61,43 +60,55 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.internetitem</groupId>
-                <artifactId>write-properties-file-maven-plugin</artifactId>
-                <version>1.0.1</version>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.3.5</version>
                 <executions>
                     <execution>
-                        <id>one</id>
-                        <phase>compile</phase>
                         <goals>
-                            <goal>write-properties-file</goal>
+                            <goal>replace</goal>
                         </goals>
-                        <configuration>
-                            <filename>config.properties</filename>
-                            <properties>
-                                <property>
-                                    <name>dir.monitoring</name>
-                                    <value>${dir.monitoring}</value>
-                                </property>
-                                <property>
-                                    <name>dir.treatedFiles</name>
-                                    <value>${dir.treatedFiles}</value>
-                                </property>
-                                <property>
-                                    <name>dir.errorFiles</name>
-                                    <value>${dir.errorFiles}</value>
-                                </property>
-                                <property>
-                                    <name>formats</name>
-                                    <value>${formats}</value>
-                                </property>
-                                <property>
-                                    <name>pool.size</name>
-                                    <value>${pool.size}</value>
-                                </property>
-                            </properties>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <file>target/classes/config.properties</file>
+                    <file>target/classes/hibernate.cfg.xml</file>
+                    <replacements>
+                        <replacement>
+                            <token>%dir.monitoring%</token>
+                            <value>${dir.monitoring}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%dir.treatedFiles%</token>
+                            <value>${dir.treatedFiles}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%dir.errorFiles%</token>
+                            <value>${dir.treatedFiles}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%formats%</token>
+                            <value>${formats}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%pool.size%</token>
+                            <value>${pool.size}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%db.url%</token>
+                            <value>${db.url}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%db.user%</token>
+                            <value>${db.user}</value>
+                        </replacement>
+                        <replacement>
+                            <token>%db.password%</token>
+                            <value>${db.password}</value>
+                        </replacement>
+                    </replacements>
+                    <file>target\classes\hibernate.cfg.xml</file>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -118,5 +129,8 @@
         <dir.errorFiles>D:\\parsing\\error</dir.errorFiles>
         <formats>XML</formats>
         <pool.size>10</pool.size>
+        <db.url>jdbc:mysql://localhost:3306/parser</db.url>
+        <db.user>root</db.user>
+        <db.password>кщще</db.password>
     </properties>
 </project>

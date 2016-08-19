@@ -6,7 +6,6 @@ public class Main {
         Setting setting = new Setting();
         EntryService service = new EntryService(setting);
 
-
         service.run();
         service.shutdown();
     }
