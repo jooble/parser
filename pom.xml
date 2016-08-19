@@ -76,23 +76,23 @@
                             <properties>
                                 <property>
                                     <name>dir.monitoring</name>
-                                    <value>D:\\parsing\\parsing</value>
+                                    <value>${dir.monitoring}</value>
                                 </property>
                                 <property>
                                     <name>dir.treatedFiles</name>
-                                    <value>D:\\parsing\\treated</value>
+                                    <value>${dir.treatedFiles}</value>
                                 </property>
                                 <property>
                                     <name>dir.errorFiles</name>
-                                    <value>D:\\parsing\\error</value>
+                                    <value>${dir.errorFiles}</value>
                                 </property>
                                 <property>
                                     <name>formats</name>
-                                    <value>XML</value>
+                                    <value>${formats}</value>
                                 </property>
                                 <property>
                                     <name>pool.size</name>
-                                    <value>10</value>
+                                    <value>${pool.size}</value>
                                 </property>
                             </properties>
                         </configuration>
@@ -113,5 +113,10 @@
         <project.build.encoding>UTF-8</project.build.encoding>
         <project.build.source>1.8</project.build.source>
         <project.build.target>1.8</project.build.target>
+        <dir.monitoring>D:\\parsing\\parsing</dir.monitoring>
+        <dir.treatedFiles>D:\\parsing\\treated</dir.treatedFiles>
+        <dir.errorFiles>D:\\parsing\\error</dir.errorFiles>
+        <formats>XML</formats>
+        <pool.size>10</pool.size>
     </properties>
 </project>
