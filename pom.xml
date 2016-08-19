@@ -40,12 +40,6 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.google.code.maven-replacer-plugin</groupId>
-            <artifactId>replacer</artifactId>
-            <version>1.5.3</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -61,18 +55,22 @@
             </plugin>
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>maven-replacer-plugin</artifactId>
-                <version>1.3.5</version>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
                 <executions>
                     <execution>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>replace</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <file>target/classes/config.properties</file>
-                    <file>target/classes/hibernate.cfg.xml</file>
+                    <basedir>${project.build.directory}/classes</basedir>
+                    <includes>
+                        <include>config.properties</include>
+                        <include>hibernate.cfg.xml</include>
+                    </includes>
                     <replacements>
                         <replacement>
                             <token>%dir.monitoring%</token>
@@ -107,7 +105,6 @@
                             <value>${db.password}</value>
                         </replacement>
                     </replacements>
-                    <file>target\classes\hibernate.cfg.xml</file>
                 </configuration>
             </plugin>
             <plugin>
@@ -116,18 +113,6 @@
                 <version>2.4.3</version>
                 <configuration>
                     <encoding>${project.build.encoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>Main</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
             </plugin>
         </plugins>
