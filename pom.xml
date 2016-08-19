@@ -41,6 +41,12 @@
             <version>1.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -53,6 +59,45 @@
                     <target>${project.build.target}</target>
                     <encoding>${project.build.encoding}</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.internetitem</groupId>
+                <artifactId>write-properties-file-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>one</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>write-properties-file</goal>
+                        </goals>
+                        <configuration>
+                            <filename>config.properties</filename>
+                            <properties>
+                                <property>
+                                    <name>dir.monitoring</name>
+                                    <value>D:\\parsing\\parsing</value>
+                                </property>
+                                <property>
+                                    <name>dir.treatedFiles</name>
+                                    <value>D:\\parsing\\treated</value>
+                                </property>
+                                <property>
+                                    <name>dir.errorFiles</name>
+                                    <value>D:\\parsing\\error</value>
+                                </property>
+                                <property>
+                                    <name>formats</name>
+                                    <value>XML</value>
+                                </property>
+                                <property>
+                                    <name>pool.size</name>
+                                    <value>10</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
