@@ -12,24 +12,29 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Setting {
-    private File dirMonitoring = new File("D:\\parsing\\parsing");
-    private File treatedFiles = new File("D:\\parsing\\treated");
-    private File errorFiles = new File("D:\\parsing\\error");
-    private String format[] = {"XML"};
+    private File dirMonitoring;
+    private File treatedFiles;
+    private File errorFiles;
+    private String formats[];
     private SessionFactory sessionFactory;
     private EntryDao entryDao;
     private ExecutorService executorService;
     private HandlerFiles handlerFiles = new HandlerFilesImpl();
+    private int poolSize;
 
 
-    public Setting(int pool) {
+    public Setting() {
         this.sessionFactory = buildSessionFactory();
         this.entryDao = new EntryDaoImpl(this.sessionFactory);
-        this.executorService = Executors.newFixedThreadPool(pool);
+        buildConfiguration();
+        this.executorService = Executors.newFixedThreadPool(poolSize);
     }
 
 
@@ -52,6 +57,24 @@ public class Setting {
         return null;
     }
 
+    private void buildConfiguration() {
+        FileInputStream fis;
+        Properties property = new Properties();
+
+        try {
+            fis = new FileInputStream("src/main/resources/config.properties");
+            property.load(fis);
+
+            this.dirMonitoring = new File(property.getProperty("dir.monitoring"));
+            this.errorFiles = new File(property.getProperty("dir.errorFiles"));
+            this.treatedFiles = new File(property.getProperty("dir.treatedFiles"));
+            this.poolSize = Integer.parseInt(property.getProperty("pool.size"));
+            this.formats = property.getProperty("formats").split("#");
+        } catch (IOException e) {
+            System.out.println("ОШИБКА: Файл свойств отсуствует!");
+        }
+    }
+
     public File getTreatedFiles() {
         return treatedFiles;
     }
@@ -68,12 +91,12 @@ public class Setting {
         this.errorFiles = errorFiles;
     }
 
-    public String[] getFormat() {
-        return format;
+    public String[] getFormats() {
+        return formats;
     }
 
-    public void setFormat(String[] format) {
-        this.format = format;
+    public void setFormats(String[] formats) {
+        this.formats = formats;
     }
 
     public SessionFactory getSessionFactory() {

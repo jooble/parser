@@ -28,7 +28,7 @@ public class EntryService extends TimerTask {
         this.dirMonitoring = setting.getDirMonitoring();
         this.treatedFiles = setting.getTreatedFiles();
         this.errorFiles = setting.getErrorFiles();
-        this.format = setting.getFormat();
+        this.format = setting.getFormats();
     }
 
 
