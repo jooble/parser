@@ -11,10 +11,12 @@ import java.util.concurrent.ExecutorService;
 
 public class EntryService extends TimerTask {
 
+    private EntryValidator validator = new EntryValidator();
+    private ConcurrentLinkedQueue<File> queue = new ConcurrentLinkedQueue();
     private EntryDao entryDao;
     private EntryParser parser = new EntryParser();
     private ExecutorService executorService;
-    private ConcurrentLinkedQueue<File> queue = new ConcurrentLinkedQueue();
+    private File validationXsd;
     private HandlerFiles handlerFiles;
     private File dirMonitoring;
     private File treatedFiles;
@@ -29,6 +31,7 @@ public class EntryService extends TimerTask {
         this.treatedFiles = setting.getTreatedFiles();
         this.errorFiles = setting.getErrorFiles();
         this.format = setting.getFormats();
+        this.validationXsd = setting.getValidationXsd();
     }
 
 
@@ -43,6 +46,8 @@ public class EntryService extends TimerTask {
                     try {
                         entryDao.begin();
 
+                        validator.validate(validationXsd, file);
+
                         Entry entry = parser.parse(file);
 
                         handlerFiles.moveFile(file, treatedFiles);
@@ -54,7 +59,7 @@ public class EntryService extends TimerTask {
                         entryDao.rollback();
 
                         handlerFiles.moveFile(file, errorFiles);
-                        System.out.println("Обработка не удалась");
+                        System.out.println("Обработка не удалась - " + e);
                     }
                 }
             });

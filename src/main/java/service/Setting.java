@@ -28,6 +28,7 @@ public class Setting {
     private ExecutorService executorService;
     private HandlerFiles handlerFiles = new HandlerFilesImpl();
     private int poolSize;
+    private File validationXsd;
 
 
     public Setting() {
@@ -68,6 +69,7 @@ public class Setting {
             this.dirMonitoring = new File(property.getProperty("dir.monitoring"));
             this.errorFiles = new File(property.getProperty("dir.errorFiles"));
             this.treatedFiles = new File(property.getProperty("dir.treatedFiles"));
+            this.validationXsd = new File(property.getProperty("validation.xsd"));
             this.poolSize = Integer.parseInt(property.getProperty("pool.size"));
             this.formats = property.getProperty("formats").split("#");
         } catch (IOException e) {
@@ -109,6 +111,22 @@ public class Setting {
 
     public EntryDao getEntryDao() {
         return entryDao;
+    }
+
+    public int getPoolSize() {
+        return poolSize;
+    }
+
+    public void setPoolSize(int poolSize) {
+        this.poolSize = poolSize;
+    }
+
+    public File getValidationXsd() {
+        return validationXsd;
+    }
+
+    public void setValidationXsd(File validationXsd) {
+        this.validationXsd = validationXsd;
     }
 
     public void setEntryDao(EntryDao entryDao) {
